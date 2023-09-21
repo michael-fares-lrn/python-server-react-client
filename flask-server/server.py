@@ -27,7 +27,7 @@ def signItemsRequest():
         "user_id": "$ANONYMIZED_USER_ID",
         # A reference of the Activity to retrieve from the Item bank, defining
         # which Items will be served in this assessment.
-        "activity_template_id": "quickstart_examples_activity_template_001",
+        "activity_template_id": "demo-activity-1",
         # Uniquely identifies this specific assessment attempt session for
         # save/resume, data retrieval and reporting purposes. A UUID generated above.
         "session_id": session_id,
@@ -42,8 +42,9 @@ def signItemsRequest():
         "type": "submit_practice",
         # Human-friendly display name to be shown in reporting.
         "name": "Items API Quickstart",
-        # Can be set to `initial, `resume` or `review`. Optional. Default = `initial`.
-        "state": "initial"
+        "config": {
+            "regions":"main"
+        }
     }
     init = Init("items", security, config.consumer_secret, items_request)
     signedItemsRequest = init.generate()
