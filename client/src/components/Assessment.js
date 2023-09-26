@@ -29,9 +29,11 @@ const Assessment = React.forwardRef((props, learnosityApiRef) => {
     }, [signedItemsRequest]);
 
     return (
-        <div className="assessment">
-            <p>ASSESSMENT COMPONENT!</p>
-            <div id="learnosity_assess"></div>
+        <div className="assessment mt-4">
+            <p className="text-center">
+            <span className="text-center rounded-lg p-3 mx-3 bg-teal-400">Items API</span>
+                Take your assessment here:</p>
+            <div id="learnosity_assess" className="shadow-lg p-4"></div>
         </div>
     );
 });

@@ -17,10 +17,6 @@ security = {
 def root():
     return "Welcome to my Python Flask API server!"
 
-@app.route("/members")
-def members():
-    return {"members": ["Member1", "Member2", "Member3"]}
-
 @app.route("/assessment")
 def signItemsRequest():
     session_id = Uuid.generate()
@@ -72,7 +68,15 @@ def signReportsRequest():
             "user_id": "$ANONYMIZED_USER_ID",
             # add session_id to the report here
             "session_id": session_id
-          }
+          },
+          {
+            "id": "sessions-summary",
+            "type": "sessions-summary",
+            "user_id": "$ANONYMIZED_USER_ID",
+            "session_ids": [
+               session_id
+            ]
+         }
         ]
     }
     init = Init("reports", security, config.consumer_secret, reports_request)

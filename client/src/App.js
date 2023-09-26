@@ -35,11 +35,10 @@ function App() {
     }, [submitted]);
 
     return (
-        <div className="App">
-            <p>session_id: {sessionId}</p>
-            {loading && <p>LOADING...</p>}
+        <div className="App font-sans container mx-auto px-4">
+            {loading && <p className="text-center">LOADING...</p>}
             {!submitted && (
-                <Assessment
+                <Assessment 
                     sessionId={sessionId}
                     signedItemsRequest={signedItemsRequest}
                     submitted={submitted}
