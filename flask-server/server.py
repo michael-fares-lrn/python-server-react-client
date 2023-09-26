@@ -1,10 +1,17 @@
 from flask import Flask
+from flask import request
 # Include server side Learnosity SDK, and set up variables related to user access
 from learnosity_sdk.request import Init
 from learnosity_sdk.utils import Uuid
 import config # Load consumer key and secret from config.py
 
 app = Flask(__name__)
+
+# global security object
+security = {
+    "consumer_key": config.consumer_key,
+    "domain": "localhost",
+}
 
 @app.route("/")
 def root():
@@ -18,10 +25,6 @@ def members():
 def signItemsRequest():
     session_id = Uuid.generate()
 
-    security = {
-        "consumer_key": config.consumer_key,
-        "domain": "localhost",
-    }
     items_request = {
         # Unique student identifier, a UUID generated above.
         "user_id": "$ANONYMIZED_USER_ID",
@@ -46,12 +49,35 @@ def signItemsRequest():
             "regions":"main",
             "configuration": {
                 "onsubmit_redirect_url": False
+            },
+            "labelBundle": {
+                "close": "Go to Reporting"
             }
         }
     }
     init = Init("items", security, config.consumer_secret, items_request)
     signedItemsRequest = init.generate()
     return signedItemsRequest
+
+@app.route("/report")
+def signReportsRequest():
+    # grab the session id from the url query paramater
+    session_id = request.args.get("session_id")
+
+    reports_request = {
+        "reports": [
+           {
+            "id": "session-detail",
+            "type": "session-detail-by-item",
+            "user_id": "$ANONYMIZED_USER_ID",
+            # add session_id to the report here
+            "session_id": session_id
+          }
+        ]
+    }
+    init = Init("reports", security, config.consumer_secret, reports_request)
+    signedReportsRequest = init.generate()
+    return signedReportsRequest
 
 
 
