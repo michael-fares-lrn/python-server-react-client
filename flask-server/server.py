@@ -17,6 +17,23 @@ security = {
 def root():
     return "Welcome to my Python Flask API server!"
 
+@app.route("/author")
+def signAuthorRequest():
+    author_request = {
+      "mode": "activity_list",
+        "user": {
+            "id": "demos-site",
+            "firstname": "Demos",
+            "lastname": "User",
+            "email": "demos@learnosity.com"
+        }
+      }
+    init = Init("author", security, config.consumer_secret, author_request)
+    signedAuthorRequest = init.generate()
+    return signedAuthorRequest
+    
+
+
 @app.route("/assessment")
 def signItemsRequest():
     session_id = Uuid.generate()

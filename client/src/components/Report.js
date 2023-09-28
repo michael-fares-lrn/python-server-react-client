@@ -3,24 +3,32 @@ const Report = React.forwardRef((props, learnosityApiRef) => {
     const { signedReportsRequest } = props;
 
     useEffect(() => {
-        const callbacks = {
-            errorListener: function (e) {
-                // Adds a listener to all error codes.
-                console.log("Error Code ", e.code);
-                console.log("Error Message ", e.msg);
-                console.log("Error Detail ", e.detail);
-            },
+        const script = document.createElement("script")
+        script.src ="https://reports.learnosity.com"
+        script.async = true
+        script.onload = () => {
+            const callbacks = {
+                errorListener: function (e) {
+                    // Adds a listener to all error codes.
+                    console.log("Error Code ", e.code);
+                    console.log("Error Message ", e.msg);
+                    console.log("Error Detail ", e.detail);
+                },
+                readyListener: function () {
+                    console.log("Learnosity Reports API is ready");
+                },
+            };
+            // reportsApp = ref.current
+            learnosityApiRef.current = window.LearnosityReports.init(
+                signedReportsRequest,
+                callbacks
+            );
+        }
+        document.body.appendChild(script)
 
-            readyListener: function () {
-                console.log("Learnosity Reports API is ready");
-
-                console.log("learnosityApiRef", learnosityApiRef);
-            },
-        };
-        learnosityApiRef.current = window.LearnosityReports.init(
-            signedReportsRequest,
-            callbacks
-        );
+        return () => {
+            document.body.removeChild(script)
+        }
     }, [signedReportsRequest]);
 
     return (

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 
-const Assessment = React.forwardRef((props, learnosityApiRef) => {
+const Author = React.forwardRef((props, learnosityApiRef) => {
 
-    const { signedItemsRequest, setSubmitted } = props;
+    const { signedAuthorRequest } = props;
     useEffect(() => {
         const script = document.createElement("script")
-        script.src ="https://items.learnosity.com"
+        script.src ="https://authorapi.learnosity.com"
         script.async = true
         script.onload = () => {
             const callbacks = {
@@ -16,19 +16,14 @@ const Assessment = React.forwardRef((props, learnosityApiRef) => {
                     console.log("Error Detail ", e.detail);
                 },
                 readyListener: function () {
-                    console.log("Learnosity Items API is ready");
+                    console.log("Learnosity Author API is ready");
     
                     console.log("learnosityApiRef", learnosityApiRef);
-    
-                    learnosityApiRef.current.on("test:finished:submit", () => {
-                        console.log("test:finished:submit FIRED");
-                        setSubmitted(true);
-                    });
                 },
             };
             // itemsApp = ref.current
-            learnosityApiRef.current = window.LearnosityItems.init(
-                signedItemsRequest,
+            learnosityApiRef.current = window.LearnosityAuthor.init(
+                signedAuthorRequest,
                 callbacks
             );
         }
@@ -38,15 +33,15 @@ const Assessment = React.forwardRef((props, learnosityApiRef) => {
             document.body.removeChild(script)
         }
     
-    }, [signedItemsRequest]);
+    }, [signedAuthorRequest]);
 
     return (
-        <div className="assessment mt-4">
+        <div className="author mt-4">
             <p className="text-center">
-            <span className="text-center rounded-lg p-3 mx-3 bg-teal-400">Items API</span>
-                Take your assessment here:</p>
-            <div id="learnosity_assess" className="shadow-lg p-4"></div>
+            <span className="text-center rounded-lg p-3 mx-3 bg-teal-400">Author API</span>
+                Author your assessment here:</p>
+            <div id="learnosity-author" className="shadow-xl p-4"></div>
         </div>
     );
 });
-export default Assessment;
+export default Author;
