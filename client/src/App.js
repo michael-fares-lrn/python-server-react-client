@@ -30,6 +30,7 @@ function App() {
         if (!authored) {
             return;
         }
+        setLoading(true)
         fetch(`/assessment?activity=${activityReference}`)
             .then((res) => res.json())
             .then((data) => {
@@ -56,9 +57,11 @@ function App() {
     return (
         <div className="App font-sans container mx-auto px-4">
             {loading && <p className="text-center">LOADING...</p>}
-            {!loading && (
+            {!loading && !authored && (
                 <Author
                     signedAuthorRequest={signedAuthorRequest}
+                    setActivityReference={setActivityReference}
+                    setAuthored={setAuthored}
                     ref={learnosityApiRef}
                 />
             )}

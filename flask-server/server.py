@@ -19,9 +19,11 @@ def root():
 
 @app.route("/author")
 def signAuthorRequest():
+    activity_reference = Uuid.generate()
     author_request = {
-      "mode": "activity_list",
-        "user": {
+      "mode": "activity_edit",
+      "reference": activity_reference,
+      "user": {
             "id": "demos-site",
             "firstname": "Demos",
             "lastname": "User",
@@ -37,13 +39,14 @@ def signAuthorRequest():
 @app.route("/assessment")
 def signItemsRequest():
     session_id = Uuid.generate()
+    activity_template_id = request.args.get("activity")
 
     items_request = {
         # Unique student identifier, a UUID generated above.
         "user_id": "$ANONYMIZED_USER_ID",
         # A reference of the Activity to retrieve from the Item bank, defining
         # which Items will be served in this assessment.
-        "items": ["Demo3", "Demo4"],
+        "activity_template_id": activity_template_id,
         # Uniquely identifies this specific assessment attempt session for
         # save/resume, data retrieval and reporting purposes. A UUID generated above.
         "session_id": session_id,
