@@ -30,6 +30,7 @@ function App() {
         if (!authored) {
             return;
         }
+        learnosityApiRef.current = null;
         setLoading(true)
         fetch(`/assessment?activity=${activityReference}`)
             .then((res) => res.json())
