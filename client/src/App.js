@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Assessment from "./components/Assessment";
 import Report from "./components/Report";
@@ -14,9 +14,6 @@ function App() {
     const [submitted, setSubmitted] = useState(false);
     const [sessionId, setSessionId] = useState("");
 
-    /** controls which Learnosity frontend API is being used */
-    const learnosityApiRef = useRef(null);
-
     useEffect(() => {
         fetch("/author")
             .then((res) => res.json())
@@ -30,8 +27,8 @@ function App() {
         if (!authored) {
             return;
         }
-        learnosityApiRef.current = null;
-        setLoading(true)
+
+        setLoading(true);
         fetch(`/assessment?activity=${activityReference}`)
             .then((res) => res.json())
             .then((data) => {
@@ -45,7 +42,7 @@ function App() {
         if (!submitted) {
             return;
         }
-        learnosityApiRef.current = null;
+
         setLoading(true);
         fetch(`/report?session_id=${sessionId}`)
             .then((res) => res.json())
@@ -63,23 +60,20 @@ function App() {
                     signedAuthorRequest={signedAuthorRequest}
                     setActivityReference={setActivityReference}
                     setAuthored={setAuthored}
-                    ref={learnosityApiRef}
                 />
             )}
-            {!submitted && authored && (
+            {!submitted && signedItemsRequest && authored && (
                 <Assessment
                     sessionId={sessionId}
                     signedItemsRequest={signedItemsRequest}
                     submitted={submitted}
                     setSubmitted={setSubmitted}
-                    ref={learnosityApiRef}
                 />
             )}
             {submitted && signedReportsRequest && !loading && (
                 <Report
                     sessionId={sessionId}
                     signedReportsRequest={signedReportsRequest}
-                    ref={learnosityApiRef}
                 />
             )}
         </div>

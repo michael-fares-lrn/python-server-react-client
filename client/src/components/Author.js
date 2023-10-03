@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Author = React.forwardRef((props, learnosityApiRef) => {
+const Author = (props) => {
     const { signedAuthorRequest, setAuthored, setActivityReference } = props;
     const [isSaved, setIsSaved] = useState(false);
     useEffect(() => {
@@ -17,34 +17,35 @@ const Author = React.forwardRef((props, learnosityApiRef) => {
                 },
                 readyListener: function () {
                     console.log("Learnosity Author API is ready");
+                    console.log("window.authorApp", window.authorApp)
 
-                    console.log("learnosityApiRef", learnosityApiRef);
 
                     // prevent save if no items:
-                    learnosityApiRef.current.on("save:activity", function (e) {
+                    window.authorApp.on("save:activity", function (e) {
                         const noItems =
-                            learnosityApiRef.current.getActivity().data.items
+                            window.authorApp.getActivity().data.items
                                 .length === 0;
                         if (noItems) {
                             alert(
-                                "please add items before you save the activity!"
+                                "Please add items before you save the activity!"
                             );
                             e.preventDefault();
                         } else {
                             console.log("the activity was saved!!");
                             setIsSaved(true);
-                            setActivityReference(learnosityApiRef.current.getActivity().reference)
+                            setActivityReference(window.authorApp.getActivity().reference)
                         }
                     });
                 },
             };
             // itemsApp = ref.current
-            learnosityApiRef.current = window.LearnosityAuthor.init(
+            window.authorApp = window.LearnosityAuthor.init(
                 signedAuthorRequest,
                 callbacks
             );
         };
         document.body.appendChild(script);
+       
 
         return () => {
             document.body.removeChild(script);
@@ -66,6 +67,7 @@ const Author = React.forwardRef((props, learnosityApiRef) => {
                     disabled={!isSaved}
                     onClick={() => {
                       setAuthored(true);
+                      window.authorApp.destroy()
                     }}
                 >
                     Take this Assessment!
@@ -74,5 +76,5 @@ const Author = React.forwardRef((props, learnosityApiRef) => {
             <div id="learnosity-author" className="shadow-xl p-4"></div>
         </div>
     );
-});
+};
 export default Author;

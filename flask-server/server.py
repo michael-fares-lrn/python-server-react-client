@@ -22,7 +22,7 @@ def signAuthorRequest():
     activity_reference = Uuid.generate()
     author_request = {
       "mode": "activity_edit",
-      "reference": activity_reference,
+      "reference": "fares_activity",
       "user": {
             "id": "demos-site",
             "firstname": "Demos",

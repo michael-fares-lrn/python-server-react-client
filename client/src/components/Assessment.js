@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const Assessment = React.forwardRef((props, learnosityApiRef) => {
+const Assessment = (props) => {
 
     const { signedItemsRequest, setSubmitted } = props;
     useEffect(() => {
@@ -17,17 +17,18 @@ const Assessment = React.forwardRef((props, learnosityApiRef) => {
                 },
                 readyListener: function () {
                     console.log("Learnosity Items API is ready");
+                    console.log("window.itemsApp", window.itemsApp)
+
     
-                    console.log("learnosityApiRef", learnosityApiRef);
-    
-                    learnosityApiRef.current.on("test:finished:submit", () => {
+                    window.itemsApp.on("test:finished:submit", () => {
                         console.log("test:finished:submit FIRED");
                         setSubmitted(true);
+                        window.itemsApp.reset()
                     });
                 },
             };
             // itemsApp = ref.current
-            learnosityApiRef.current = window.LearnosityItems.init(
+            window.itemsApp = window.LearnosityItems.init(
                 signedItemsRequest,
                 callbacks
             );
@@ -48,5 +49,5 @@ const Assessment = React.forwardRef((props, learnosityApiRef) => {
             <div id="learnosity_assess" className="shadow-lg p-4"></div>
         </div>
     );
-});
+};
 export default Assessment;
