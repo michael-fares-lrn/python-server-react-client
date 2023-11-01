@@ -30,15 +30,17 @@ const Author = (props) => {
                                 "Please add items before you save the activity!"
                             );
                             e.preventDefault();
-                        } else {
+                        }
+                    });
+
+                    window.authorApp.on('save:activity:success', () => {
                             console.log("the activity was saved!!");
                             setIsSaved(true);
                             setActivityReference(window.authorApp.getActivity().reference)
-                        }
-                    });
+                        
+                    })
                 },
             };
-            // itemsApp = ref.current
             window.authorApp = window.LearnosityAuthor.init(
                 signedAuthorRequest,
                 callbacks

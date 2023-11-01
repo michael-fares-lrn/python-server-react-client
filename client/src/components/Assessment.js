@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const Assessment = (props) => {
+const Assessment = (props, learnosityApiRef) => {
 
     const { signedItemsRequest, setSubmitted } = props;
     useEffect(() => {
@@ -18,6 +18,9 @@ const Assessment = (props) => {
                 readyListener: function () {
                     console.log("Learnosity Items API is ready");
                     console.log("window.itemsApp", window.itemsApp)
+                    if(typeof window.itemsApp.getActivity !== "function") {
+                        console.warn("Items App missing methods")
+                    }
 
     
                     window.itemsApp.on("test:finished:submit", () => {
@@ -27,7 +30,7 @@ const Assessment = (props) => {
                     });
                 },
             };
-            // itemsApp = ref.current
+           
             window.itemsApp = window.LearnosityItems.init(
                 signedItemsRequest,
                 callbacks
